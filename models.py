@@ -1,8 +1,8 @@
 from app import db
 
 
-class Result(db.Model):
-    __tablename__ = "results"
+class FinancialData(db.Model):
+    __tablename__ = "financial_data"
 
     id = db.Column(db.Integer, primary_key=True)
     department = db.Column(db.String())
