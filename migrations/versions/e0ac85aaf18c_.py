@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c79d040560ca
+Revision ID: e0ac85aaf18c
 Revises: 
-Create Date: 2020-12-18 11:57:04.595424
+Create Date: 2020-12-18 13:17:33.917258
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c79d040560ca'
+revision = 'e0ac85aaf18c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,13 +25,13 @@ def upgrade():
     sa.Column('product', sa.String(), nullable=True),
     sa.Column('discount_band', sa.String(), nullable=True),
     sa.Column('units_sold', sa.Float(), nullable=True),
-    sa.Column('manufacturing', sa.Integer(), nullable=True),
-    sa.Column('sales_price', sa.Integer(), nullable=True),
-    sa.Column('gross_price', sa.Integer(), nullable=True),
-    sa.Column('discounts', sa.Integer(), nullable=True),
-    sa.Column('sales', sa.Integer(), nullable=True),
-    sa.Column('cogs', sa.Integer(), nullable=True),
-    sa.Column('profit', sa.Integer(), nullable=True),
+    sa.Column('manufacturing_price', sa.Float(), nullable=True),
+    sa.Column('sale_price', sa.Float(), nullable=True),
+    sa.Column('gross_sales', sa.Float(), nullable=True),
+    sa.Column('discounts', sa.Float(), nullable=True),
+    sa.Column('sales', sa.Float(), nullable=True),
+    sa.Column('cogs', sa.Float(), nullable=True),
+    sa.Column('profit', sa.Float(), nullable=True),
     sa.Column('date', sa.Date(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
