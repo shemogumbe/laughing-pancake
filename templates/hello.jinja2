@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" />
 
     <title>Hello, world!</title>
 </head>
@@ -40,6 +41,8 @@
                         </div>
                     </li>
                 </ul>
+                <div id="container"></div>
+                <div></div>
                 <table id="financial-data" class="table table-striped">
                     <thead>
                         <tr>
@@ -67,14 +70,85 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
 
     <script type="application/javascript">
         $(document).ready(function () {
             $('#financial-data').DataTable({
                 "lengthMenu": [20, 50, 100],
                 "processing": true,
-                "ajax": "/data"
+                "data": data.table,
             });
+        });
+    </script>
+
+    <script type="application/javascript">
+        var data = {
+            financial: [{
+                name: 'Gross Sales',
+                data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+            }, {
+                name: 'COGS',
+                data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+            }, {
+                name: 'Profit',
+                data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
+            }],
+            table: {{ data| tojson }},
+        };
+    </script>
+
+    <script type="application/javascript">
+        Highcharts.chart('container', {
+
+            title: {
+                text: 'Financial'
+            },
+
+            xAxis: {
+                type: 'datetime' // milliseconds
+            },
+
+            yAxis: {
+                title: {
+                    text: 'Dollars'
+                }
+            },
+
+
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 2010
+                }
+            },
+
+            series: data.financial,
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
         });
     </script>
 </body>

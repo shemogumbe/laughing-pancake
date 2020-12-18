@@ -16,21 +16,25 @@ from models import FinancialData
 
 
 @app.route("/")
-def hello():
-    return render_template("hello.html")
-
-
-@app.route("/data")
-def data():
-    data = FinancialData.query.all()
-    return jsonify(
-        {
-            "draw": 1,
-            "recordsTotal": len(data),
-            "recordsFiltered": len(data),
-            "data": [list(i.to_dict().values()) for i in data],
-        }
+def home():
+    data = FinancialData.query.order_by(FinancialData.date.desc()).all()
+    return render_template(
+        "hello.jinja2",
+        data=[list(i.to_dict().values()) for i in data],
     )
+
+
+# @app.route("/data")
+# def data():
+#     data = FinancialData.query.all()
+#     return jsonify(
+#         {
+#             "draw": 1,
+#             "recordsTotal": len(data),
+#             "recordsFiltered": len(data),
+#             "data": [list(i.to_dict().values()) for i in data],
+#         }
+#     )
 
 
 if __name__ == "__main__":
