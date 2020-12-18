@@ -1,0 +1,11 @@
+version: 2.4
+services:
+  postgres:
+    image: postgres:10
+    environment:
+      - POSTGRES_DB=contracts
+      - POSTGRES_USER=csuser
+      - POSTGRES_PASSWORD=cspass
+    ports: 
+      - "5433:5432"
+
