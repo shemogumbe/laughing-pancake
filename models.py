@@ -26,3 +26,20 @@ class FinancialData(db.Model):
 
     def __repr__(self):
         return f"table name {self.__tablename__} id: {self.id}"
+
+    def to_dict(self):
+        return {
+            "department": self.department,
+            "country": self.country,
+            "product": self.product,
+            "discount_band": self.discount_band,
+            "units_sold": self.units_sold,
+            "manufacturing_price": self.manufacturing_price,
+            "sale_price": self.sale_price,
+            "gross_sales": self.gross_sales,
+            "discounts": self.discounts,
+            "sales": self.sales,
+            "cogs": self.cogs,
+            "profit": self.profit,
+            "date": self.date,
+        }

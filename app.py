@@ -1,7 +1,7 @@
 import os
 
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 
@@ -17,7 +17,20 @@ from models import FinancialData
 
 @app.route("/")
 def hello():
-    return render_template("hello.html", name="sdsd")
+    return render_template("hello.html")
+
+
+@app.route("/data")
+def data():
+    data = FinancialData.query.all()
+    return jsonify(
+        {
+            "draw": 1,
+            "recordsTotal": len(data),
+            "recordsFiltered": len(data),
+            "data": [list(i.to_dict().values()) for i in data],
+        }
+    )
 
 
 if __name__ == "__main__":
