@@ -1,4 +1,6 @@
+import csv
 import os
+import re
 from datetime import datetime
 
 from dotenv import load_dotenv
@@ -161,8 +163,74 @@ def home():
     )
 
 
-@app.route("/upload")
+import io
+
+
+@app.route(
+    "/upload",
+    methods=(
+        "GET",
+        "POST",
+    ),
+)
 def upload_data():
+    if request.method == "POST":
+        local_file_content = request.files.get("local_file_upload")
+        if request.args.get("clear_data"):
+            # delete all the data
+            pass
+        regex = r"\$\W"
+        if local_file_content:
+            data = []
+
+            stream = io.StringIO(
+                local_file_content.stream.read().decode(), newline=None
+            )
+
+            for row in csv.DictReader(stream, skipinitialspace=True):
+                row = {key.strip(): value.strip() for key, value in row.items()}
+                discount_band = row.get("Discount Band")
+                if discount_band == "None":
+                    discount_band = None
+                manufacturing_price = row.get("Manufacturing Price")
+                if manufacturing_price:
+                    manufacturing_price = float(re.sub(regex, "", manufacturing_price))
+                sale_price = row.get("Sale Price")
+                if sale_price:
+                    sale_price = float(re.sub(regex, "", sale_price))
+                gross_sales = row.get("Gross Sales")
+                if gross_sales:
+                    gross_sales = float(re.sub(regex, "", gross_sales))
+                discounts = row.get("Discounts")
+                if discounts:
+                    discounts = float(re.sub(regex, "", discounts))
+                sales = row.get("Sales")
+                if sales:
+                    sales = float(re.sub(regex, "", sales))
+                cogs = row.get("COGS")
+                if cogs:
+                    cogs = float(re.sub(regex, "", cogs))
+                profit = row.get("Profit")
+                if profit:
+                    profit = float(re.sub(regex, "", profit))
+
+                FinancialData(
+                    department=row.get("Department"),
+                    country=row.get("Country"),
+                    product=row.get("Product"),
+                    discount_band=discount_band,
+                    units_sold=row.get("Units Sold"),
+                    manufacturing_price=manufacturing_price,
+                    sale_price=sale_price,
+                    gross_sales=gross_sales,
+                    discounts=discounts,
+                    sales=sales,
+                    cogs=cogs,
+                    profit=profit,
+                    date=row.get("Date"),
+                )
+                # print("Read:  %r" % row)
+        return "works"
     return render_template(
         "upload.jinja2",
     )

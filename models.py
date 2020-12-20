@@ -19,10 +19,35 @@ class FinancialData(db.Model):
     profit = db.Column(db.Float())
     date = db.Column(db.Date())
 
-    def __init__(self, url, result_all, result_no_stop_words):
-        self.url = url
-        self.result_all = result_all
-        self.result_no_stop_words = result_no_stop_words
+    def __init__(
+        self,
+        department,
+        country,
+        product,
+        discount_band,
+        units_sold,
+        manufacturing_price,
+        sale_price,
+        gross_sales,
+        discounts,
+        sales,
+        cogs,
+        profit,
+        date,
+    ):
+        self.department = department
+        self.country = country
+        self.product = product
+        self.discount_band = discount_band
+        self.units_sold = units_sold
+        self.manufacturing_price = manufacturing_price
+        self.sale_price = sale_price
+        self.gross_sales = gross_sales
+        self.discounts = discounts
+        self.sales = sales
+        self.cogs = cogs
+        self.profit = profit
+        self.date = date
 
     def __repr__(self):
         return f"table name {self.__tablename__} id: {self.id}"
