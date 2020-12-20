@@ -41,31 +41,19 @@
                             <fieldset>
                                 <legend>Filters</legend>
                                 <select id="country" name="country" multiple>
-                                    <option selected>Compact car</option>
-                                    <option>Midsize car</option>
-                                    <option>Full size car</option>
-                                    <option>SUV</option>
-                                    <option>Luxury</option>
-                                    <option>Truck</option>
-                                    <option>Van</option>
+                                    {% for country in all_countries %}
+                                    <option>{{ country }}</option>
+                                    {% endfor %}
                                 </select>
                                 <select id="department" name="department" multiple>
-                                    <option selected>Compact car</option>
-                                    <option>Midsize car</option>
-                                    <option>Full size car</option>
-                                    <option>SUV</option>
-                                    <option>Luxury</option>
-                                    <option>Truck</option>
-                                    <option>Van</option>
+                                    {% for department in all_departments %}
+                                    <option>{{ department }}</option>
+                                    {% endfor %}
                                 </select>
                                 <select id="product" name="product" multiple>
-                                    <option selected>Compact car</option>
-                                    <option>Midsize car</option>
-                                    <option>Full size car</option>
-                                    <option>SUV</option>
-                                    <option>Luxury</option>
-                                    <option>Truck</option>
-                                    <option>Van</option>
+                                    {% for product in all_products %}
+                                    <option>{{ product }}</option>
+                                    {% endfor %}
                                 </select>
                                 <button type="submit">Filter</button>
                             </fieldset>
