@@ -54,18 +54,5 @@ def home():
     )
 
 
-# @app.route("/data")
-# def data():
-#     data = FinancialData.query.all()
-#     return jsonify(
-#         {
-#             "draw": 1,
-#             "recordsTotal": len(data),
-#             "recordsFiltered": len(data),
-#             "data": [list(i.to_dict().values()) for i in data],
-#         }
-#     )
-
-
 if __name__ == "__main__":
     app.run()
