@@ -150,6 +150,9 @@ def home():
         # product
         all_products=[x.product for x in products],
         selected_products=selected_products,
+        # date
+        from_date=from_date.strftime("%Y-%m-%d"),
+        to_date=to_date.strftime("%Y-%m-%d"),
     )
 
 
