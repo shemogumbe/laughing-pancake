@@ -1,4 +1,5 @@
 import csv
+import io
 import os
 import re
 from datetime import datetime
@@ -163,9 +164,6 @@ def home():
     )
 
 
-import io
-
-
 @app.route(
     "/upload",
     methods=(
@@ -174,13 +172,14 @@ import io
     ),
 )
 def upload_data():
+    message = ""
     if request.method == "POST":
         local_file_content = request.files.get("local_file_upload")
-        if request.args.get("clear_data"):
-            # delete all the data
-            pass
-        regex = r"[\$,\ -]"
-        if local_file_content:
+        if request.form.get("clear_data") == "true":
+            db.session.query(FinancialData).delete()
+            message = "successfully cleared data in the database"
+        elif local_file_content:
+            regex = r"[\$,\ -]"
             data = []
 
             stream = io.StringIO(
@@ -234,14 +233,11 @@ def upload_data():
                     )
                 )
 
-            session = db.session
-            session.bulk_save_objects(data)
-            session.commit()
+            db.session.bulk_save_objects(data)
 
-        return "works"
-    return render_template(
-        "upload.jinja2",
-    )
+            message = "successfully uploaded CSV data, go home to view"
+        db.session.commit()
+    return render_template("upload.jinja2", message=message)
 
 
 if __name__ == "__main__":

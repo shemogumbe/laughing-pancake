@@ -14,6 +14,21 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
     <title>Upload Data</title>
+    <style>
+        .wrapper {
+            padding: 2px;
+        }
+
+        .filter-padding {
+            padding: 4px;
+            border: 1px solid lightgray;
+            box-shadow: inset 1px 1px 1px #000000
+        }
+
+        .padding-20 {
+            padding: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -35,6 +50,9 @@
         <div class="container-fluid">
             <div class="col-md-11">
                 <div class="widget filter-padding">
+                    {% if message%}
+                    <h3>{{ message }}</h3>
+                    {% else %}
                     <form action="/upload" method="POST" enctype="multipart/form-data">
                         <fieldset>
                             <button name="clear_data" value="true">Clear Data</button>
@@ -54,6 +72,7 @@
                         </fieldset>
                         <button name="submit" type="submit">Upload Data</button>
                     </form>
+                    {% endif %}
                 </div>
             </div>
 
