@@ -43,6 +43,17 @@ def _get_all_countries():
     )
 
 
+def _get_data_filter(query, countries, departments, products):
+    # filter data based on the the provided query params
+    if countries:
+        query = query.filter(FinancialData.country.in_(countries))
+    if departments:
+        query = query.filter(FinancialData.department.in_(departments))
+    if products:
+        query = query.filter(FinancialData.product.in_(products))
+    return query
+
+
 def _get_financial_data():
     query = db.session.query(
         FinancialData.date,
@@ -77,9 +88,13 @@ def home():
     selected_countries = request.args.getlist("country")
     selected_products = request.args.getlist("product")
 
-    table = FinancialData.query.order_by(FinancialData.date.desc()).all()
-    financial = _get_financial_data()
+    table_query = FinancialData.query
+    table_query = _get_data_filter(
+        table_query, selected_countries, selected_departments, selected_products
+    )
+    table = table_query.order_by(FinancialData.date.desc()).all()
 
+    financial = _get_financial_data()
     products = _get_all_products()
     departments = _get_all_departments()
     countries = _get_all_countries()
