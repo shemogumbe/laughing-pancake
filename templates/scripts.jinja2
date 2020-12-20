@@ -1,0 +1,60 @@
+ Highcharts.chart('graph', {
+
+    chart: {
+        type: 'column'
+    },
+
+    title: {
+        text: 'Financial Report'
+    },
+
+    xAxis: {
+        type: 'datetime',// milliseconds
+        title: {
+            text: 'Date'
+        },
+        {% if from_date_milliseconds %}
+        min: {{ from_date_milliseconds }},
+        {% endif %}
+        {% if to_date_milliseconds %}
+        max: {{ to_date_milliseconds }},
+        {% endif %}
+    },
+
+    yAxis: {
+        title: {
+            text: 'Dollars'
+        },
+        min: 0,
+        },
+
+    tooltip: {
+        valueDecimals: 2,
+        valuePrefix: '$',
+        valueSuffix: ' USD'
+    },
+
+
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+    },
+
+    series: data.financial,
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                }
+            }
+        }]
+    }
+
+});
