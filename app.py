@@ -179,7 +179,7 @@ def upload_data():
         if request.args.get("clear_data"):
             # delete all the data
             pass
-        regex = r"\$\W"
+        regex = r"[\$,\ -]"
         if local_file_content:
             data = []
 
@@ -192,44 +192,52 @@ def upload_data():
                 discount_band = row.get("Discount Band")
                 if discount_band == "None":
                     discount_band = None
-                manufacturing_price = row.get("Manufacturing Price")
-                if manufacturing_price:
-                    manufacturing_price = float(re.sub(regex, "", manufacturing_price))
-                sale_price = row.get("Sale Price")
-                if sale_price:
-                    sale_price = float(re.sub(regex, "", sale_price))
-                gross_sales = row.get("Gross Sales")
-                if gross_sales:
-                    gross_sales = float(re.sub(regex, "", gross_sales))
-                discounts = row.get("Discounts")
-                if discounts:
-                    discounts = float(re.sub(regex, "", discounts))
-                sales = row.get("Sales")
-                if sales:
-                    sales = float(re.sub(regex, "", sales))
-                cogs = row.get("COGS")
-                if cogs:
-                    cogs = float(re.sub(regex, "", cogs))
-                profit = row.get("Profit")
-                if profit:
-                    profit = float(re.sub(regex, "", profit))
-
-                FinancialData(
-                    department=row.get("Department"),
-                    country=row.get("Country"),
-                    product=row.get("Product"),
-                    discount_band=discount_band,
-                    units_sold=row.get("Units Sold"),
-                    manufacturing_price=manufacturing_price,
-                    sale_price=sale_price,
-                    gross_sales=gross_sales,
-                    discounts=discounts,
-                    sales=sales,
-                    cogs=cogs,
-                    profit=profit,
-                    date=row.get("Date"),
+                manufacturing_price = re.sub(
+                    regex, "", row.get("Manufacturing Price", "")
                 )
-                # print("Read:  %r" % row)
+                manufacturing_price = (
+                    float(manufacturing_price) if manufacturing_price else None
+                )
+                sale_price = re.sub(regex, "", row.get("Sale Price", ""))
+                sale_price = float(sale_price) if sale_price else None
+                gross_sales = re.sub(regex, "", row.get("Gross Sales", ""))
+                ross_sales = float(gross_sales) if gross_sales else None
+                discounts = re.sub(regex, "", row.get("Discounts", ""))
+                discounts = float(discounts) if discounts else None
+                sales = re.sub(regex, "", row.get("Sales", ""))
+                sales = float(sales) if sales else None
+                cogs = re.sub(regex, "", row.get("COGS", ""))
+                cogs = float(cogs) if cogs else None
+                profit = re.sub(regex, "", row.get("Profit", ""))
+                if profit:
+                    if profit.startswith("("):
+                        profit = "-" + profit[1:-1]
+                    profit = float(profit)
+                else:
+                    profit = None
+
+                data.append(
+                    FinancialData(
+                        department=row.get("Department"),
+                        country=row.get("Country"),
+                        product=row.get("Product"),
+                        discount_band=discount_band,
+                        units_sold=row.get("Units Sold"),
+                        manufacturing_price=manufacturing_price,
+                        sale_price=sale_price,
+                        gross_sales=gross_sales,
+                        discounts=discounts,
+                        sales=sales,
+                        cogs=cogs,
+                        profit=profit,
+                        date=datetime.strptime(row.get("Date"), "%m/%d/%Y"),
+                    )
+                )
+
+            session = db.session
+            session.bulk_save_objects(data)
+            session.commit()
+
         return "works"
     return render_template(
         "upload.jinja2",
