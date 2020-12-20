@@ -1,7 +1,7 @@
 version: 2.4
 services:
   postgres:
-    image: postgres:10
+    image: postgres:12-alpine
     environment:
       - POSTGRES_DB=contracts
       - POSTGRES_USER=csuser
