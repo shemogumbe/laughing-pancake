@@ -153,6 +153,9 @@ def home():
         # date
         from_date=from_date.strftime("%Y-%m-%d") if from_date else "",
         to_date=to_date.strftime("%Y-%m-%d") if to_date else "",
+        # for the graph axes when date time is selected
+        from_date_milliseconds=from_date.timestamp() * 1000 if from_date else None,
+        to_date_milliseconds=to_date.timestamp() * 1000 if to_date else None,
     )
 
 

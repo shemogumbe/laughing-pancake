@@ -178,7 +178,13 @@
                 type: 'datetime',// milliseconds
                 title: {
                     text: 'Date'
-                }
+                },
+                {% if from_date_milliseconds %}
+                min: {{ from_date_milliseconds }},
+                {% endif %}
+                {% if to_date_milliseconds %}
+                max: {{ to_date_milliseconds }},
+                {% endif %}
             },
 
             yAxis: {
@@ -186,8 +192,7 @@
                     text: 'Dollars'
                 },
                 min: 0,
-
-            },
+                },
 
             tooltip: {
                 valueDecimals: 2,
@@ -202,17 +207,7 @@
                 verticalAlign: 'middle'
             },
 
-            plotOptions: {
-                series: {
-                    label: {
-                        connectorAllowed: false
-                    },
-                    pointStart: 2010
-                }
-            },
-
             series: data.financial,
-
             responsive: {
                 rules: [{
                     condition: {
