@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 
@@ -72,6 +72,11 @@ def _get_financial_data():
 
 @app.route("/")
 def home():
+
+    selected_departments = request.args.getlist("department")
+    selected_countries = request.args.getlist("country")
+    selected_products = request.args.getlist("product")
+
     table = FinancialData.query.order_by(FinancialData.date.desc()).all()
     financial = _get_financial_data()
 
@@ -83,12 +88,15 @@ def home():
         "home.jinja2",
         table=[list(i.to_dict().values()) for i in table],
         financial=financial,
+        # country
         all_countries=[x.country for x in countries],
-        selected_countries=[],
+        selected_countries=selected_countries,
+        # department
         all_departments=[x.department for x in departments],
-        selected_departments=[],
+        selected_departments=selected_departments,
+        # product
         all_products=[x.product for x in products],
-        selected_products=[],
+        selected_products=selected_products,
     )
 
 
