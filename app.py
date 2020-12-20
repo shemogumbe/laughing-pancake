@@ -43,17 +43,21 @@ def _get_all_countries():
     )
 
 
-def _get_data_filter(query, countries, departments, products):
+def _get_data_filter(query, countries, departments, products, from_date, to_date):
     if countries:
         query = query.filter(FinancialData.country.in_(countries))
     if departments:
         query = query.filter(FinancialData.department.in_(departments))
     if products:
         query = query.filter(FinancialData.product.in_(products))
+    if from_date:
+        query = query.filter(FinancialData.date >= str(from_date))
+    if to_date:
+        query = query.filter(FinancialData.date < str(to_date))
     return query
 
 
-def _get_line_graph_data(countries, departments, products):
+def _get_line_graph_data(countries, departments, products, from_date, to_date):
     query = db.session.query(
         FinancialData.date,
         func.sum(FinancialData.gross_sales).label("gross_sales"),
@@ -62,7 +66,12 @@ def _get_line_graph_data(countries, departments, products):
         func.sum(FinancialData.profit).label("profit"),
     )
     query = _get_data_filter(
-        query, countries=countries, departments=departments, products=products
+        query,
+        countries=countries,
+        departments=departments,
+        products=products,
+        from_date=from_date,
+        to_date=to_date,
     )
     query = query.group_by(FinancialData.date).order_by(FinancialData.date)
 
@@ -83,10 +92,15 @@ def _get_line_graph_data(countries, departments, products):
     ]
 
 
-def get_table_data(countries, departments, products):
+def get_table_data(countries, departments, products, from_date, to_date):
     query = FinancialData.query
     query = _get_data_filter(
-        query, countries=countries, departments=departments, products=products
+        query,
+        countries=countries,
+        departments=departments,
+        products=products,
+        from_date=from_date,
+        to_date=to_date,
     )
     return query.order_by(FinancialData.date.desc()).all()
 
@@ -97,17 +111,27 @@ def home():
     selected_departments = request.args.getlist("department")
     selected_countries = request.args.getlist("country")
     selected_products = request.args.getlist("product")
+    from_date = request.args.get("from")
+    if from_date:
+        from_date = datetime.fromisoformat(from_date)
+    to_date = request.args.get("to")
+    if to_date:
+        to_date = datetime.fromisoformat(to_date)
 
     table = get_table_data(
         countries=selected_countries,
         departments=selected_departments,
         products=selected_products,
+        from_date=from_date,
+        to_date=to_date,
     )
 
     graph = _get_line_graph_data(
         countries=selected_countries,
         departments=selected_departments,
         products=selected_products,
+        from_date=from_date,
+        to_date=to_date,
     )
     products = _get_all_products()
     departments = _get_all_departments()
