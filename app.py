@@ -156,6 +156,15 @@ def home():
         # for the graph axes when date time is selected
         from_date_milliseconds=from_date.timestamp() * 1000 if from_date else None,
         to_date_milliseconds=to_date.timestamp() * 1000 if to_date else None,
+        # get args
+        get_args=request.query_string.decode(),
+    )
+
+
+@app.route("/upload")
+def upload_data():
+    return render_template(
+        "upload.jinja2",
     )
 
 
