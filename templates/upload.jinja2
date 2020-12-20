@@ -53,30 +53,28 @@
                     {% if message%}
                     <h3>{{ message }}</h3>
                     {% else %}
-                    <form action="/upload" method="POST" enctype="multipart/form-data">
-                        <fieldset>
-                            <button name="clear_data" value="true">Clear Data</button>
-                        </fieldset>
-                        <fieldset>
-                            <legend>
-                                <div>
-                                    <label for="google_drive_upload">Google Drive Link</label>
-                                    <input id="google_drive_upload" type="text" name="google_drive_upload" />
-                                </div>
-                                <div>
-                                    <label for="local_file_upload">Local File</label>
-                                    <input id="local_file_upload" type="file" accept=".csv, text/plain"
-                                        name="local_file_upload" />
-                                </div>
-                            </legend>
-                        </fieldset>
-                        <button name="submit" type="submit">Upload Data</button>
-                    </form>
+                    <div style="padding: 1.5rem;margin-right: 0;margin-left: 0;border-width: .2rem;">
+                        <form action="/upload" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="google_drive_upload">Google Drive Link</label>
+                                <input type="text" class="form-control" id="google_drive_upload"
+                                    placeholder="Paste link to Google Drive">
+                            </div>
+                            <div class="form-group">
+                                <label for="local_file_upload">Example file input</label>
+                                <input type="file" class="form-control-file" id="local_file_upload"
+                                    accept=".csv, text/plain" name="local_file_upload"
+                                    placeholder="select a CSV file to upload">
+                            </div>
+                            <button name="submit" class="btn btn-primary" type="submit">Upload Data</button>
+                            <button name="clear_data" class="btn btn-danger" value="true">Clear Data</button>
+                        </form>
+                    </div>
                     {% endif %}
                 </div>
             </div>
-
         </div>
+
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </body>
