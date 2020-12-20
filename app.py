@@ -44,7 +44,6 @@ def _get_all_countries():
 
 
 def _get_data_filter(query, countries, departments, products):
-    # filter data based on the the provided query params
     if countries:
         query = query.filter(FinancialData.country.in_(countries))
     if departments:
@@ -54,13 +53,16 @@ def _get_data_filter(query, countries, departments, products):
     return query
 
 
-def _get_financial_data():
+def _get_line_graph_data(countries, departments, products):
     query = db.session.query(
         FinancialData.date,
         func.sum(FinancialData.gross_sales).label("gross_sales"),
         func.sum(FinancialData.sales).label("sales"),
         func.sum(FinancialData.cogs).label("cogs"),
         func.sum(FinancialData.profit).label("profit"),
+    )
+    query = _get_data_filter(
+        query, countries=countries, departments=departments, products=products
     )
     query = query.group_by(FinancialData.date).order_by(FinancialData.date)
 
@@ -81,6 +83,14 @@ def _get_financial_data():
     ]
 
 
+def get_table_data(countries, departments, products):
+    query = FinancialData.query
+    query = _get_data_filter(
+        query, countries=countries, departments=departments, products=products
+    )
+    return query.order_by(FinancialData.date.desc()).all()
+
+
 @app.route("/")
 def home():
 
@@ -88,13 +98,17 @@ def home():
     selected_countries = request.args.getlist("country")
     selected_products = request.args.getlist("product")
 
-    table_query = FinancialData.query
-    table_query = _get_data_filter(
-        table_query, selected_countries, selected_departments, selected_products
+    table = get_table_data(
+        countries=selected_countries,
+        departments=selected_departments,
+        products=selected_products,
     )
-    table = table_query.order_by(FinancialData.date.desc()).all()
 
-    financial = _get_financial_data()
+    graph = _get_line_graph_data(
+        countries=selected_countries,
+        departments=selected_departments,
+        products=selected_products,
+    )
     products = _get_all_products()
     departments = _get_all_departments()
     countries = _get_all_countries()
@@ -102,7 +116,7 @@ def home():
     return render_template(
         "home.jinja2",
         table=[list(i.to_dict().values()) for i in table],
-        financial=financial,
+        graph=graph,
         # country
         all_countries=[x.country for x in countries],
         selected_countries=selected_countries,
