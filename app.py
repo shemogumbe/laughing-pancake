@@ -3,7 +3,6 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template
-from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 
