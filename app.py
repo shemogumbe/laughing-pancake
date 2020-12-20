@@ -80,7 +80,7 @@ def home():
     countries = _get_all_countries()
 
     return render_template(
-        "hello.jinja2",
+        "home.jinja2",
         table=[list(i.to_dict().values()) for i in table],
         financial=financial,
         all_countries=[x.country for x in countries],
