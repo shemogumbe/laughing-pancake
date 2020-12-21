@@ -31,6 +31,11 @@
         .padding-20 {
             padding: 20px;
         }
+
+        .form-control.fluid-width-input {
+            width: 30%;
+            display: inline;
+        }
     </style>
     <div>
         <div class="row">
@@ -50,38 +55,49 @@
         <div class="row">
             <div class="container-fluid">
                 <div class="col-md-11">
-                    <div class="widget filter-padding">
+                    <div class="widget filter-padding"
+                        style="padding: 1.5rem;margin-right: 0;margin-left: 0;border-width: .2rem;">
                         <form action="/">
                             <fieldset>
                                 <legend>Filters</legend>
                                 <div class="wrapper">
-                                    <label for="country">Country:</label>
-                                    <select id="country" name="country" multiple>
-                                        {% for country in all_countries %}
-                                        <option {{"selected" if country in selected_countries }}>{{ country }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <label for="department">Department:</label>
-                                    <select id="department" name="department" multiple>
-                                        {% for department in all_departments %}
-                                        <option {{"selected" if department in selected_departments }}>{{ department }}
-                                        </option>
-                                        {% endfor %}
-                                    </select>
-                                    <label for="product">Product:</label>
-                                    <select id="product" name="product" multiple>
-                                        {% for product in all_products %}
-                                        <option {{"selected" if product in selected_products }}>{{ product }}</option>
-                                        {% endfor %}
-                                    </select>
+                                    <div class="form-group">
+                                        <label for="country">Country:</label>
+                                        <select id="country" name="country" class="form-control" multiple>
+                                            {% for country in all_countries %}
+                                            <option {{"selected" if country in selected_countries }}>{{ country }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+
+                                        <label for="department">Department:</label>
+                                        <select id="department" name="department" class="form-control" multiple>
+                                            {% for department in all_departments %}
+                                            <option {{"selected" if department in selected_departments }}>{{ department
+                                                }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+
+                                        <label for="product">Product:</label>
+                                        <select id="product" name="product" class="form-control" multiple>
+                                            {% for product in all_products %}
+                                            <option {{"selected" if product in selected_products }}>{{ product }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class='form-group'>
+                                        <label for="from">from:</label>
+                                        <input type="date" id="from" name="from" value="{{ from_date }}"
+                                            class="form-control fluid-width-input">
+                                        <label for="to">to:</label>
+                                        <input type="date" id="to" name="to" value="{{ to_date }}"
+                                            class="form-control fluid-width-input">
+                                    </div>
                                 </div>
-                                <div class='wrapper'>
-                                    <label for="from">from:</label>
-                                    <input type="date" id="from" name="from" value="{{ from_date }}">
-                                    <label for="to">to:</label>
-                                    <input type="date" id="to" name="to" value="{{ to_date }}">
-                                </div>
-                                <button type="submit">Filter</button>
+                                <button type="submit" class="btn btn-primary">Search</button>
                             </fieldset>
                         </form>
                     </div>
@@ -151,7 +167,7 @@
             ].forEach(element => {
                 $(element.id).select2({
                     placeholder: element.placeholder,
-                    width: "25em",
+                    width: "20em",
                 });
             });
         });
